@@ -1,10 +1,12 @@
-# Uniswap V4 Hooks Skill for Claude Code
+# V4 Hooks Skill for Claude Code
 
-A community-driven Claude Code skill that helps developers build **secure** Uniswap V4 hooks. This skill embeds security best practices, vulnerability patterns from real audits, and battle-tested code patterns directly into your AI-assisted development workflow.
+> **https://v4hooks.dev**
+
+A community-driven Claude Code skill that helps developers build **secure** V4 hooks. This skill embeds security best practices, vulnerability patterns from real audits, and battle-tested code patterns directly into your AI-assisted development workflow.
 
 ## Why This Exists
 
-Uniswap V4 hooks are powerful but dangerous. A single vulnerability can drain user funds. "Vibe coding" smart contracts without security expertise leads to exploits.
+V4 hooks are powerful but dangerous. A single vulnerability can drain user funds. "Vibe coding" smart contracts without security expertise leads to exploits.
 
 This skill ensures that when you use Claude to develop V4 hooks, it:
 - **Knows the threat model** before writing any code
@@ -23,14 +25,14 @@ Built from 20+ pages of documentation including:
 ### Using npx (Recommended)
 
 ```bash
-npx skills add https://github.com/YOUR_USERNAME/uniswapV4-hooks-skill
+npx skills add https://github.com/igoryuzo/uniswapV4-hooks-skill
 ```
 
 ### Manual Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/uniswapV4-hooks-skill.git
+git clone https://github.com/igoryuzo/uniswapV4-hooks-skill.git
 ```
 
 2. Add to your Claude Code skills directory or configuration.
@@ -157,4 +159,7 @@ The maintainers are not responsible for vulnerabilities in hooks developed using
 
 ---
 
-**Built for the Uniswap community. PRs welcome.**
+**Built for the V4 hooks community. PRs welcome.**
+
+**Website:** https://v4hooks.dev
+**GitHub:** https://github.com/igoryuzo/uniswapV4-hooks-skill
