@@ -334,7 +334,7 @@ Allowlisted hooks on Uniswap (as of Jan 2025):
 - Panoptic Oracle Hook
 - AEGIS Dynamic Fee Mechanism
 
-Study these for patterns: https://github.com/fewwwww/awesome-uniswap-hooks
+Study these for patterns: https://raw.githubusercontent.com/fewwwww/awesome-uniswap-hooks/refs/heads/main/README.md
 
 ## NEVER Do This
 
