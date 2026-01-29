@@ -1,0 +1,21 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node (if adding tooling later)
+node_modules/
+package-lock.json
+
+# Build artifacts
+*.skill
+dist/
+
+# Local testing
+.env
+.env.local
