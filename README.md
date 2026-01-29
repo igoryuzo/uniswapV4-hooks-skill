@@ -1,6 +1,6 @@
 # V4 Hooks Skill for Claude Code
 
-> **https://v4hooks.dev**
+> **https://www.v4hooks.dev/**
 
 A community-driven Claude Code skill that helps developers build **secure** V4 hooks. This skill embeds security best practices, vulnerability patterns from real audits, and battle-tested code patterns directly into your AI-assisted development workflow.
 
@@ -161,5 +161,5 @@ The maintainers are not responsible for vulnerabilities in hooks developed using
 
 **Built for the V4 hooks community. PRs welcome.**
 
-**Website:** https://v4hooks.dev
+**Website:** https://www.v4hooks.dev/
 **GitHub:** https://github.com/igoryuzo/uniswapV4-hooks-skill
