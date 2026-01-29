@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>v4hooks.dev — Secure Uniswap V4 Hook Development | Claude Code Skill</title>
+    <meta name="title" content="v4hooks.dev — Secure Uniswap V4 Hook Development | Claude Code Skill">
+    <meta name="description" content="Claude Code skill for building secure Uniswap V4 hooks. Security-first patterns extracted from Certora & ABDK audits. Stop vibe coding vulnerabilities.">
+    <meta name="keywords" content="Uniswap V4, hooks, smart contracts, Solidity, DeFi, security, audit, Claude Code, AI coding, blockchain development, PoolManager, beforeSwap, afterSwap">
+    <meta name="author" content="Igor Yuzovitskiy">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://v4hooks.dev">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://v4hooks.dev">
+    <meta property="og:title" content="v4hooks.dev — Secure Uniswap V4 Hook Development">
+    <meta property="og:description" content="Claude Code skill for building secure V4 hooks. Security patterns from real audits. One command install.">
+    <meta property="og:image" content="https://v4hooks.dev/og-image.png">
+    <meta property="og:site_name" content="v4hooks.dev">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://v4hooks.dev">
+    <meta name="twitter:title" content="v4hooks.dev — Secure Uniswap V4 Hook Development">
+    <meta name="twitter:description" content="Claude Code skill for building secure V4 hooks. Security patterns from real audits.">
+    <meta name="twitter:image" content="https://v4hooks.dev/og-image.png">
+
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#00ffd0">
+    <meta name="creator" content="Igor Yuzovitskiy">
+    <meta name="publisher" content="Igor Yuzovitskiy">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "v4hooks",
+        "description": "Claude Code skill for building secure Uniswap V4 hooks with security-first patterns from real audits",
+        "url": "https://v4hooks.dev",
+        "author": {
+            "@type": "Person",
+            "name": "Igor Yuzovitskiy"
+        },
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Cross-platform",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "softwareRequirements": "Claude Code CLI",
+        "keywords": "Uniswap V4, hooks, smart contracts, security, Solidity, DeFi"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #0a0a0b;
+            --bg-surface: #111113;
+            --bg-elevated: #1a1a1d;
+            --cyan: #00ffd0;
+            --cyan-dim: #00ffd033;
+            --cyan-glow: #00ffd066;
+            --red-alert: #ff3b5c;
+            --text-primary: #e8e8e8;
+            --text-secondary: #888888;
+            --text-dim: #555555;
+            --border: #2a2a2d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Scan line effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.1) 2px,
+                rgba(0, 0, 0, 0.1) 4px
+            );
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: '>';
+            opacity: 0.5;
+        }
+
+        .github-link {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .github-link:hover {
+            color: var(--cyan);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 8rem 0 6rem;
+            position: relative;
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--cyan);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 2rem;
+            height: 1px;
+            background: var(--cyan);
+        }
+
+        .hero h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            line-height: 1.05;
+            margin-bottom: 2rem;
+            max-width: 900px;
+        }
+
+        .hero h1 .highlight {
+            color: var(--cyan);
+            position: relative;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Install Section */
+        .install-section {
+            padding: 4rem 0;
+        }
+
+        .terminal {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            max-width: 800px;
+            box-shadow:
+                0 0 0 1px rgba(0, 255, 208, 0.05),
+                0 20px 50px -20px rgba(0, 0, 0, 0.5),
+                0 0 100px -50px var(--cyan-dim);
+        }
+
+        .terminal-header {
+            background: var(--bg-elevated);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        .terminal-dot:first-child { background: #ff5f57; }
+        .terminal-dot:nth-child(2) { background: #febc2e; }
+        .terminal-dot:nth-child(3) { background: #28c840; }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .terminal-body {
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .terminal-line {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+        }
+
+        .terminal-prompt {
+            color: var(--cyan);
+            user-select: none;
+        }
+
+        .terminal-command {
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .terminal-command .cmd {
+            color: var(--cyan);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background: var(--cyan);
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--cyan);
+            color: var(--bg-deep);
+            border-color: var(--cyan);
+        }
+
+        .copy-btn.copied {
+            background: #28c840;
+            border-color: #28c840;
+            color: var(--bg-deep);
+        }
+
+        /* Features */
+        .features {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature {
+            padding: 2rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            border-color: var(--cyan-dim);
+            transform: translateY(-2px);
+        }
+
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyan), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .feature p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Alert Feature */
+        .feature.alert {
+            border-color: var(--red-alert);
+            background: linear-gradient(135deg, rgba(255, 59, 92, 0.05), transparent);
+        }
+
+        .feature.alert h3 {
+            color: var(--red-alert);
+        }
+
+        .feature.alert::before {
+            background: linear-gradient(90deg, var(--red-alert), transparent);
+            opacity: 1;
+        }
+
+        /* What's Inside */
+        .whats-inside {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-dim);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .check-item::before {
+            content: '✓';
+            color: var(--cyan);
+            font-weight: bold;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 6rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .cta h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--cyan);
+            color: var(--bg-deep);
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px var(--cyan-dim);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        footer p {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--cyan);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-label { animation: fadeInUp 0.6s ease both; animation-delay: 0.1s; }
+        .hero h1 { animation: fadeInUp 0.6s ease both; animation-delay: 0.2s; }
+        .hero-subtitle { animation: fadeInUp 0.6s ease both; animation-delay: 0.3s; }
+        .terminal { animation: fadeInUp 0.6s ease both; animation-delay: 0.5s; }
+        .feature { animation: fadeInUp 0.6s ease both; }
+        .feature:nth-child(1) { animation-delay: 0.1s; }
+        .feature:nth-child(2) { animation-delay: 0.2s; }
+        .feature:nth-child(3) { animation-delay: 0.3s; }
+        .feature:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 5rem 0 4rem;
+            }
+
+            .github-link {
+                position: static;
+                transform: none;
+                display: block;
+                margin-top: 1rem;
+            }
+
+            .terminal-body {
+                padding: 1rem;
+            }
+
+            .terminal-line {
+                font-size: 0.75rem;
+                flex-wrap: wrap;
+            }
+
+            .copy-btn {
+                position: static;
+                transform: none;
+                margin-top: 1rem;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="/" class="logo">v4hooks.dev</a>
+            <a href="https://github.com/igoryuzo/uniswapV4-hooks-skill" class="github-link" target="_blank">GitHub →</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-label">Claude Code Skill</div>
+                <h1>Build <span class="highlight">secure</span> V4 hooks.<br>Stop vibe coding vulnerabilities.</h1>
+                <p class="hero-subtitle">A skill that embeds security patterns from real audits directly into your AI-assisted development workflow.</p>
+            </div>
+        </section>
+
+        <section class="install-section">
+            <div class="container">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-dot"></span>
+                        <span class="terminal-title">Terminal</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">$</span>
+                            <span class="terminal-command"><span class="cmd">npx</span> skills add https://github.com/igoryuzo/uniswapV4-hooks-skill</span>
+                            <span class="cursor"></span>
+                        </div>
+                        <button class="copy-btn" onclick="copyCommand()">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature">
+                        <span class="feature-icon">🛡</span>
+                        <h3>Security-First Patterns</h3>
+                        <p>Access control, delta accounting, router verification—baked into every suggestion Claude makes.</p>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">📋</span>
+                        <h3>Audit-Based Knowledge</h3>
+                        <p>Patterns extracted from Certora & ABDK audit reports. Real vulnerabilities, real fixes.</p>
+                    </div>
+                    <div class="feature alert">
+                        <span class="feature-icon">⚠</span>
+                        <h3>NoOp Rug Pull Warnings</h3>
+                        <p>Claude knows about beforeSwapReturnDelta attacks and will warn you before you ship a vulnerability.</p>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">✓</span>
+                        <h3>Pre-Deploy Checklist</h3>
+                        <p>Risk scoring framework (0-33), audit tier recommendations, and security checklists before mainnet.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="whats-inside">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label">What's inside</div>
+                    <h2 class="section-title">Built from 20+ pages of docs</h2>
+                </div>
+                <div class="checklist">
+                    <div class="check-item">Official Uniswap V4 security framework</div>
+                    <div class="check-item">Certora TWAMM audit findings</div>
+                    <div class="check-item">ABDK Consulting audit findings</div>
+                    <div class="check-item">NoOp rug pull exploit analysis</div>
+                    <div class="check-item">50+ production hook examples</div>
+                    <div class="check-item">Permission flags risk matrix</div>
+                    <div class="check-item">Delta accounting patterns</div>
+                    <div class="check-item">Foundry testing templates</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <div class="container">
+                <h2>Ready to build secure hooks?</h2>
+                <p>One command. Instant security knowledge.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="copyCommand()">Copy Install Command</button>
+                    <a href="https://github.com/igoryuzo/uniswapV4-hooks-skill" class="btn btn-secondary" target="_blank">View on GitHub</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Open source by <a href="https://github.com/igoryuzo">Igor Yuzovitskiy</a>. <a href="https://github.com/igoryuzo/uniswapV4-hooks-skill">Contribute on GitHub</a>.</p>
+        </div>
+    </footer>
+
+    <script>
+        function copyCommand() {
+            const command = 'npx skills add https://github.com/igoryuzo/uniswapV4-hooks-skill';
+            navigator.clipboard.writeText(command).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Also handle the CTA button
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            const command = 'npx skills add https://github.com/igoryuzo/uniswapV4-hooks-skill';
+            navigator.clipboard.writeText(command).then(() => {
+                const originalText = this.textContent;
+                this.textContent = 'Copied!';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
