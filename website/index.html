@@ -464,6 +464,113 @@
             font-weight: bold;
         }
 
+        /* Examples */
+        .examples {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .example-card {
+            display: block;
+            padding: 2rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .example-card:hover {
+            border-color: var(--cyan);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -20px rgba(0, 255, 208, 0.2);
+        }
+
+        .example-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyan), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .example-card:hover::before {
+            opacity: 1;
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .example-hook {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--cyan);
+            background: var(--cyan-dim);
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+        }
+
+        .example-arrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            transition: all 0.3s;
+        }
+
+        .example-card:hover .example-arrow {
+            color: var(--cyan);
+            transform: translateX(4px);
+        }
+
+        .example-card h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .example-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+        }
+
+        .example-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-dim);
+            background: var(--bg-elevated);
+            padding: 0.3rem 0.6rem;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+        }
+
         /* CTA */
         .cta {
             padding: 6rem 0;
@@ -565,6 +672,7 @@
         .feature:nth-child(2) { animation-delay: 0.2s; }
         .feature:nth-child(3) { animation-delay: 0.3s; }
         .feature:nth-child(4) { animation-delay: 0.4s; }
+        .example-card { animation: fadeInUp 0.6s ease both; animation-delay: 0.2s; }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -677,6 +785,29 @@
                     <div class="check-item">Permission flags risk matrix</div>
                     <div class="check-item">Delta accounting patterns</div>
                     <div class="check-item">Foundry testing templates</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="examples">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label">Learn by example</div>
+                    <h2 class="section-title">Live Hook Examples</h2>
+                </div>
+                <div class="examples-grid">
+                    <a href="https://afterswap.v4hooks.dev/" class="example-card" target="_blank">
+                        <div class="example-header">
+                            <span class="example-hook">afterSwap</span>
+                            <span class="example-arrow">→</span>
+                        </div>
+                        <h3>Swap Fee Distribution</h3>
+                        <p>Learn how afterSwap hooks work by exploring a real implementation that distributes fees after every swap.</p>
+                        <div class="example-tags">
+                            <span class="tag">Interactive</span>
+                            <span class="tag">Beginner</span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </section>
