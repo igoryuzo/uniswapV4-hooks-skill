@@ -676,7 +676,9 @@
         .feature:nth-child(2) { animation-delay: 0.2s; }
         .feature:nth-child(3) { animation-delay: 0.3s; }
         .feature:nth-child(4) { animation-delay: 0.4s; }
-        .example-card { animation: fadeInUp 0.6s ease both; animation-delay: 0.2s; }
+        .example-card { animation: fadeInUp 0.6s ease both; }
+        .example-card:nth-child(1) { animation-delay: 0.1s; }
+        .example-card:nth-child(2) { animation-delay: 0.2s; }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -810,6 +812,18 @@
                         <div class="example-tags">
                             <span class="tag">Live on Base</span>
                             <span class="tag">Beginner</span>
+                        </div>
+                    </a>
+                    <a href="https://dynamicfee.v4hooks.dev/" class="example-card" target="_blank">
+                        <div class="example-header">
+                            <span class="example-hook">beforeSwap</span>
+                            <span class="example-arrow">→</span>
+                        </div>
+                        <h3>Dynamic Fee Override</h3>
+                        <p>Live demo of beforeSwap fee override—fees adjust from 0.01% to 0.30% based on swap size. Larger swaps get better rates.</p>
+                        <div class="example-tags">
+                            <span class="tag">Live on Base</span>
+                            <span class="tag">Intermediate</span>
                         </div>
                     </a>
                 </div>
